@@ -79,6 +79,13 @@ All API routes are under `/api`. Frontend uses `Authorization: Bearer <token>`.
 | GET    | /api/admin/complaints   | `?status=&category=&search=` | List all (filtered) |
 | PATCH  | /api/admin/complaints/:id | `{ status, adminNotes? }` | Update status      |
 
+### Admin — Analytics & Reports
+
+| Method | Path                         | Query | Description |
+|--------|------------------------------|-------|-------------|
+| GET    | /api/admin/analytics/stats    | `?fromDate=&toDate=&status=&category=` | Aggregated stats (byStatus, byCategory, byDate) |
+| GET    | /api/admin/reports/export    | `?format=excel|pdf&fromDate=&toDate=&status=&category=&userId=` | Download PDF or Excel report (auth required) |
+
 **Status values:** `pending` | `in_progress` | `resolved` | `rejected`  
 **Category values:** `technical` | `billing` | `service` | `other`
 

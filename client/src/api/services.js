@@ -65,6 +65,28 @@ export const adminComplaintApi = {
       }),
 }
 
+// Admin – Analytics
+export const adminAnalyticsApi = {
+  getStats: (params) => apiClient.get('/admin/analytics/stats', { params }).then((r) => r.data),
+}
+
+// Admin – Reports (download with auth token)
+export const adminReportsApi = {
+  downloadReport: (format, params = {}) =>
+    apiClient
+      .get('/admin/reports/export', { params: { format, ...params }, responseType: 'blob' })
+      .then((res) => {
+        const ext = format === 'pdf' ? 'pdf' : 'xlsx'
+        const name = `complaints-report-${Date.now()}.${ext}`
+        const url = URL.createObjectURL(new Blob([res.data]))
+        const a = document.createElement('a')
+        a.href = url
+        a.download = name
+        a.click()
+        URL.revokeObjectURL(url)
+      }),
+}
+
 // Chatbot (mock/stub – replace with real API)
 export const chatbotApi = {
   sendMessage: (message) =>

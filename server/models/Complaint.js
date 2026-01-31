@@ -38,6 +38,18 @@ export const Complaint = {
       sql += ' AND category = ?'
       params.push(filters.category)
     }
+    if (filters.userId) {
+      sql += ' AND user_id = ?'
+      params.push(filters.userId)
+    }
+    if (filters.fromDate) {
+      sql += ' AND date(created_at) >= date(?)'
+      params.push(filters.fromDate)
+    }
+    if (filters.toDate) {
+      sql += ' AND date(created_at) <= date(?)'
+      params.push(filters.toDate)
+    }
     if (filters.search) {
       sql += ' AND (title LIKE ? OR description LIKE ?)'
       const term = `%${filters.search}%`
@@ -46,6 +58,40 @@ export const Complaint = {
     sql += ' ORDER BY created_at DESC'
     const rows = params.length ? db.prepare(sql).all(...params) : db.prepare(sql).all()
     return rows.map(rowToComplaint)
+  },
+
+  getStatsByStatus(filters = {}) {
+    let sql = "SELECT status, COUNT(*) as count FROM complaints WHERE 1=1"
+    const params = []
+    if (filters.fromDate) { sql += ' AND date(created_at) >= date(?)'; params.push(filters.fromDate) }
+    if (filters.toDate) { sql += ' AND date(created_at) <= date(?)'; params.push(filters.toDate) }
+    if (filters.category) { sql += ' AND category = ?'; params.push(filters.category) }
+    sql += ' GROUP BY status'
+    const rows = params.length ? db.prepare(sql).all(...params) : db.prepare(sql).all()
+    return rows.map((r) => ({ status: r.status, count: r.count }))
+  },
+
+  getStatsByCategory(filters = {}) {
+    let sql = "SELECT category, COUNT(*) as count FROM complaints WHERE 1=1"
+    const params = []
+    if (filters.fromDate) { sql += ' AND date(created_at) >= date(?)'; params.push(filters.fromDate) }
+    if (filters.toDate) { sql += ' AND date(created_at) <= date(?)'; params.push(filters.toDate) }
+    if (filters.status) { sql += ' AND status = ?'; params.push(filters.status) }
+    sql += ' GROUP BY category ORDER BY count DESC'
+    const rows = params.length ? db.prepare(sql).all(...params) : db.prepare(sql).all()
+    return rows.map((r) => ({ category: r.category, count: r.count }))
+  },
+
+  getStatsByDate(filters = {}) {
+    let sql = "SELECT date(created_at) as date, COUNT(*) as count FROM complaints WHERE 1=1"
+    const params = []
+    if (filters.fromDate) { sql += ' AND date(created_at) >= date(?)'; params.push(filters.fromDate) }
+    if (filters.toDate) { sql += ' AND date(created_at) <= date(?)'; params.push(filters.toDate) }
+    if (filters.category) { sql += ' AND category = ?'; params.push(filters.category) }
+    if (filters.status) { sql += ' AND status = ?'; params.push(filters.status) }
+    sql += ' GROUP BY date(created_at) ORDER BY date ASC'
+    const rows = params.length ? db.prepare(sql).all(...params) : db.prepare(sql).all()
+    return rows.map((r) => ({ date: r.date, count: r.count }))
   },
 
   updateStatus(id, status, adminNotes) {

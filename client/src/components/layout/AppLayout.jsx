@@ -20,9 +20,14 @@ export function AppLayout() {
         </NavLink>
         <nav className={styles.nav}>
           {user?.role === 'admin' ? (
-            <NavLink to="/admin" className={({ isActive }) => (isActive ? styles.active : '')}>
-              Complaints
-            </NavLink>
+            <>
+              <NavLink to="/admin" className={({ isActive }) => (isActive ? styles.active : '')}>
+                Complaints
+              </NavLink>
+              <NavLink to="/admin/reports" className={({ isActive }) => (isActive ? styles.active : '')}>
+                Reports
+              </NavLink>
+            </>
           ) : (
             <>
               <NavLink to="/home" className={({ isActive }) => (isActive ? styles.active : '')}>
