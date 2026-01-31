@@ -1,0 +1,20 @@
+.filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.filters input,
+.filters select {
+  min-height: 42px;
+}
+
+.filters input {
+  flex: 1;
+  min-width: 220px;
+}
+
+.filters select {
+  min-width: 160px;
+}

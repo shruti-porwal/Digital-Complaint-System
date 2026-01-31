@@ -1,0 +1,88 @@
+.page {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: var(--color-text-muted);
+}
+
+.back:hover {
+  color: var(--color-primary);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.meta {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.description {
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.adminNotes {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.adminNotes h4 {
+  margin-bottom: 0.5rem;
+}
+
+.adminNotes p {
+  color: var(--color-text-muted);
+}
+
+.trackingCard {
+  margin-bottom: 1.5rem;
+}
+
+.trackingCard h3 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.complaintId {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-top: 1rem;
+}
+
+.attachments {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.attachments h4 {
+  margin-bottom: 0.5rem;
+}
+
+.attachments ul {
+  list-style: none;
+}
+
+.attachments li {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.error {
+  color: var(--color-error);
+  margin-bottom: 1rem;
+}
