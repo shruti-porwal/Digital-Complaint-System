@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { complaintApi } from '../../api/services'
+import { subscribeComplaintUpdates } from '../../api/socket'
+import { useAuth } from '../../context/AuthContext'
 import { Card, Button, Loader } from '../../components/common'
 import { StatusBadge } from '../../components/complaints/StatusBadge'
 import { TrackingSearch } from '../../components/dashboard/TrackingSearch'
@@ -9,6 +11,7 @@ import { IconSubmit, IconTrack, IconReport, IconChevron } from '../../components
 import styles from './UserDashboard.module.css'
 
 export function UserDashboard() {
+  const { user } = useAuth()
   const [complaints, setComplaints] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -33,6 +36,14 @@ export function UserDashboard() {
   useEffect(() => {
     loadComplaints()
   }, [])
+
+  useEffect(() => {
+    if (!user?.id) return
+    const disconnect = subscribeComplaintUpdates({ userId: user.id }, () => {
+      loadComplaints()
+    })
+    return disconnect
+  }, [user?.id])
 
   if (loading && complaints.length === 0) return <Loader />
   if (error) return <div className={styles.error}>{error}</div>

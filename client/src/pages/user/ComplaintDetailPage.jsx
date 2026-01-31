@@ -1,24 +1,42 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { complaintApi } from '../../api/services'
+import { subscribeComplaintUpdates } from '../../api/socket'
 import { Card, Loader } from '../../components/common'
 import { StatusBadge } from '../../components/complaints/StatusBadge'
 import { StatusTimeline } from '../../components/complaints/StatusTimeline'
+import { useAuth } from '../../context/AuthContext'
 import styles from './ComplaintDetailPage.module.css'
 
 export function ComplaintDetailPage() {
   const { id } = useParams()
+  const { user } = useAuth()
   const [complaint, setComplaint] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  useEffect(() => {
+  const fetchComplaint = () => {
     complaintApi
       .getById(id)
       .then((res) => setComplaint(res?.data))
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false))
+  }
+
+  useEffect(() => {
+    fetchComplaint()
   }, [id])
+
+  useEffect(() => {
+    if (!user?.id || !id) return
+    const disconnect = subscribeComplaintUpdates(
+      { userId: user.id, complaintId: id },
+      (updated) => {
+        if (updated?.id === id) setComplaint(updated)
+      }
+    )
+    return disconnect
+  }, [user?.id, id])
 
   if (loading) return <Loader />
   if (error || !complaint)

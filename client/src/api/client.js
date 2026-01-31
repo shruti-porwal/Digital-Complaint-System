@@ -31,8 +31,10 @@ apiClient.interceptors.response.use(
       localStorage.removeItem('user')
       window.location.href = '/login'
     }
-    const message =
-      error.response?.data?.message || error.message || 'Something went wrong'
+    let message = error.response?.data?.message || error.message
+    if (!message || message === 'Network Error' || error.code === 'ECONNREFUSED' || error.code === 'ERR_NETWORK') {
+      message = 'Cannot reach server. Start the backend with: npm run server'
+    }
     return Promise.reject(new Error(message))
   }
 )
