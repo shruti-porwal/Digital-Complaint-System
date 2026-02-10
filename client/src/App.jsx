@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from './context/AuthContext'
 import { AppLayout } from './components/layout/AppLayout'
 import { ProtectedRoute } from './components/layout/ProtectedRoute'
 import { LoginPage } from './pages/LoginPage'
+import { SignupPage } from './pages/SignupPage'
 import { HomePage } from './pages/user/HomePage'
 import { SubmitComplaintPage } from './pages/user/SubmitComplaintPage'
 import { ComplaintDetailPage } from './pages/user/ComplaintDetailPage'
@@ -31,6 +32,7 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/login" element={user ? <Navigate to={user.role === 'admin' ? '/admin' : '/home'} replace /> : <LoginPage />} />
+      <Route path="/signup" element={user ? <Navigate to={user.role === 'admin' ? '/admin' : '/home'} replace /> : <SignupPage />} />
       <Route
         path="/"
         element={

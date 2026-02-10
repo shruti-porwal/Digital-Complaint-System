@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { Input, Button } from '../components/common'
 import styles from './LoginPage.module.css'
@@ -74,7 +74,10 @@ export function LoginPage() {
           </Button>
         </form>
 
-        <p className={styles.hint}>Demo: user@test.com (user) or admin@test.com (admin) — any password when backend is offline</p>
+        <p className={styles.hint}>© 2026 ComplaintHub. Secure Access.</p>
+        <p className={styles.hint} style={{ marginTop: '0.5rem' }}>
+          Don't have an account? <Link to="/signup">Sign up</Link>
+        </p>
       </div>
     </div>
   )

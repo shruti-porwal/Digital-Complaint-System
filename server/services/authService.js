@@ -19,6 +19,17 @@ export const authService = {
     return { success: true, user, token }
   },
 
+  register(name, email, password) {
+    const existingUser = User.findByEmail(email)
+    if (existingUser) {
+      return { success: false, message: 'Email already registered' }
+    }
+    const passwordHash = bcrypt.hashSync(password, 10)
+    const newUser = User.create({ email, passwordHash, name, role: 'user' })
+    const token = jwt.sign({ sub: newUser.id }, config.jwtSecret, { expiresIn: config.jwtExpiresIn })
+    return { success: true, user: newUser, token }
+  },
+
   getProfile(userId) {
     return User.findById(userId) || null
   },

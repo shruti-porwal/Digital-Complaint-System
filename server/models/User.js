@@ -1,4 +1,5 @@
 import { db } from '../config/database.js'
+import crypto from 'node:crypto'
 
 export const User = {
   findByEmail(email) {

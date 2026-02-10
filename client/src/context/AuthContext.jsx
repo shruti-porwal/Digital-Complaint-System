@@ -32,6 +32,22 @@ export function AuthProvider({ children }) {
     }
   }, [])
 
+  const register = useCallback(async (name, email, password) => {
+    if (useMock) {
+      // Simple mock registration
+      const newUser = { id: 'mock-id', name, email, role: 'user' }
+      localStorage.setItem('token', 'mock-token')
+      localStorage.setItem('user', JSON.stringify(newUser))
+      setUser(newUser)
+      return
+    }
+    // No fallback to mock for register - if backend is down, registration fails
+    const { data } = await authApi.register(name, email, password)
+    localStorage.setItem('token', data.token)
+    localStorage.setItem('user', JSON.stringify(data.user))
+    setUser(data.user)
+  }, [])
+
   const logout = useCallback(() => {
     localStorage.removeItem('token')
     localStorage.removeItem('user')
@@ -71,7 +87,7 @@ export function AuthProvider({ children }) {
   }, [loadUser])
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   )
